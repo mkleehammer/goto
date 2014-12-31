@@ -158,12 +158,15 @@ class SymbolIndex
 
     for entry in entries
       fqn = path.join(dirPath, entry)
-      stats = fs.statSync(fqn)
-      if @keepPath(fqn,stats.isFile())
-        if stats.isDirectory()
-          dirs.push(fqn)
-        else if stats.isFile()
-          @processFile(fqn)
+      try
+          stats = fs.statSync(fqn)
+          if @keepPath(fqn,stats.isFile())
+            if stats.isDirectory()
+              dirs.push(fqn)
+            else if stats.isFile()
+              @processFile(fqn)
+      catch e
+          continue
     entries = null
 
     for dir in dirs
